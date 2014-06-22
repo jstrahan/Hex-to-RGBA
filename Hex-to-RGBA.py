@@ -21,13 +21,13 @@ class HexToRgbaCommand(sublime_plugin.TextCommand):
         value = value.lstrip('#')
         if len(value) == 3:
             value = ''.join([v*2 for v in list(value)])
-        return tuple(int(value[i:i+2], 16) for i in range(0, 6, 2))+(1,)
+        return tuple(int(value[i:i+2], 16)/255 for i in range(0, 6, 2))+(1,)
 
     def convert_to_rgba_css(self, word_region):
         word = self.view.substr(word_region)
         re_hex_color = re.compile('#?([0-9a-fA-F]{3}([0-9a-fA-F]{3})?){1}$')
         if re_hex_color.match(word):
             rgba = self.hex_to_rgba(word)
-            rgba_css = 'rgba(%s,%s,%s,%s)' % rgba
+            rgba_css = '(%s,%s,%s,%s)' % rgba
             return rgba_css
         return False
